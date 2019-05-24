@@ -1,0 +1,77 @@
+CREATE DEFINER=`root`@`localhost` TRIGGER `film_BEFORE_DELETE` 
+
+BEFORE DELETE ON `film` 
+
+FOR EACH ROW BEGIN
+
+ #delete from film_actor where film_id = old.film_id; 
+
+ #delete from film where film_id = old.film_id; 
+
+ signal sqlstate '45000' set message_text = '¡no puedes eliminar este dato Eliminado!';
+
+END
+
+
+CREATE DEFINER=`root`@`localhost` TRIGGER `film_actor_BEFORE_DELETE` 
+BEFORE DELETE ON `film_actor` 
+FOR EACH ROW BEGIN
+    
+signal sqlstate '45000' set message_text = '¡No puedes eliminar este dato!';
+END
+
+
+CREATE DEFINER=`root`@`localhost` TRIGGER `actor_BEFORE_DELETE` 
+BEFORE DELETE ON `actor` 
+FOR EACH ROW BEGIN
+
+ signal sqlstate '45000' set message_text = '¡No puedes eliminar este dato!';
+ #end if;
+
+END
+
+CREATE DEFINER=`root`@`localhost` TRIGGER `actor_BEFORE_INSERT` 
+BEFORE INSERT ON `actor` 
+FOR EACH ROW BEGIN
+     if (new.actor_id is null) or (new.actor_id = 0) then
+signal sqlstate '45000' set message_text = '¡Inserta un id valido!';
+end if;
+
+END
+
+REATE DEFINER=`root`@`localhost` TRIGGER `film_actor_BEFORE_INSERT` 
+BEFORE INSERT ON `film_actor` 
+FOR EACH ROW BEGIN
+
+declare countt int;
+declare counttt int;
+
+ 
+select count(*) into countt from actor where actor.actor_id = new.actor_id; 
+ 
+select count(*) into counttt from film where film.film_id = new.film_id; 
+ 
+ 
+if
+ (countt = 0) then
+ signal sqlstate '45000' set message_text = '¡Inserta un id valido de la tabla actor!';
+ 
+end if;
+
+ if
+ (counttt = 0) then
+ signal sqlstate '45000' set message_text = '¡Inserta un id valido de la tabla film!';
+ end if;
+
+END
+
+CREATE DEFINER=`root`@`localhost` TRIGGER `film_
+BEFORE_INSERT` BEFORE INSERT ON `film` 
+FOR EACH ROW BEGIN
+
+    
+ if (new.film_id is null)or(new.film_id = 0) then
+signal sqlstate '45000' set message_text = '¡Inserta un id valido!';
+end if ; 
+
+END
